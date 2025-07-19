@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, MapPin, Car, User, Phone, Mail, Upload, ArrowRight, ArrowLeft } from 'lucide-react';
 import { useCars } from '../hooks/useCars';
 import { useReservations } from '../hooks/useReservations';
@@ -13,7 +13,7 @@ interface ReservePageProps {
 const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
   const { user } = useAuth();
   const { cars } = useCars();
-  const { createReservation } = useReservations();
+  const { createReservation, getReservationsBetweenDates} = useReservations();
   const { showSuccess, showError, showInfo } = useToast();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -28,8 +28,14 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
     fullName: user?.fullName || '',
     email: user?.email || '',
     phone: user?.phone || '',
-    patentDocument: null as File | null
+    patentDocument: null as File | null,
+    userId: user?.id || null
   });
+  const [filteredCars, setFilteredCars] = useState<CarType[]>(cars);
+
+  useEffect(() => {
+    updateAvailableCars();
+  }, [reservationData.pickupDate, reservationData.dropoffDate, cars]);
 
   const locations = [
     'Tirana Airport',
@@ -59,9 +65,26 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
     }
   };
 
-  const getAvailableCars = () => {
-    return cars.filter(car => car.available);
+  const updateAvailableCars = async () => {
+  if (!reservationData.pickupDate || !reservationData.dropoffDate) {
+    setFilteredCars(cars); 
+    return;
+  }
+
+  const overlappingReservations = await getReservationsBetweenDates(
+    reservationData.pickupDate,
+    reservationData.dropoffDate
+  );
+
+  const reservedCarIds = new Set(overlappingReservations.map(r => r.car_id));
+
+  const available = cars.filter(car => !reservedCarIds.has(car.id));
+    setFilteredCars(available);
   };
+
+  // const getAvailableCars = () => {
+  //   return cars.filter(car => car.available);
+  // };
 
   const getSelectedCar = () => {
     return cars.find(car => car.id === reservationData.selectedCarId);
@@ -138,7 +161,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
     try {
       const reservation: Omit<Reservation, 'id' | 'createdAt'> = {
-        userId: user?.id || null,
+        userId: reservationData.userId || null,
         carId: reservationData.selectedCarId,
         fullName: reservationData.fullName,
         email: reservationData.email,
@@ -175,7 +198,8 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
         fullName: user?.fullName || '',
         email: user?.email || '',
         phone: user?.phone || '',
-        patentDocument: null
+        patentDocument: null,
+        userId: user?.id || null
       });
     } catch (error) {
       console.error('Error creating reservation:', error);
@@ -354,7 +378,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {getAvailableCars().map((car) => (
+              {filteredCars.map((car) => (
                 <div
                   key={car.id}
                   className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${

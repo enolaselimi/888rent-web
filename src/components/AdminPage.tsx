@@ -651,7 +651,7 @@ const AdminPage: React.FC = () => {
                     Image URL
                   </label>
                   <input
-                    type="url"
+                    type="text"
                     value={carFormData.image}
                     onChange={(e) => setCarFormData(prev => ({ ...prev, image: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
