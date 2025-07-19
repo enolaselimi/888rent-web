@@ -17,7 +17,7 @@ export const sendReservationConfirmation = async (
     
     const emailData: EmailData = {
       to: reservation.email,
-      subject: `Reservation Confirmation - 888Rent (${car.name})`,
+      subject: `Reservation Submission - 888Rent (${car.name})`,
       html: emailHtml,
       reservationData: {
         reservationId: reservation.id,
@@ -56,7 +56,7 @@ const generateReservationEmailHTML = (reservation: Reservation, car: Car): strin
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Reservation Confirmation - 888Rent</title>
+        <title>Reservation Submission - 888Rent</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -160,7 +160,7 @@ const generateReservationEmailHTML = (reservation: Reservation, car: Car): strin
                 <div class="logo">
                     <span class="red">888</span>Rent
                 </div>
-                <h2>Reservation Confirmation</h2>
+                <h2>Reservation Submission</h2>
                 <div class="confirmation-number">
                     Confirmation #: ${reservation.id.slice(-8).toUpperCase()}
                 </div>
@@ -168,7 +168,7 @@ const generateReservationEmailHTML = (reservation: Reservation, car: Car): strin
 
             <p>Dear ${reservation.fullName},</p>
             
-            <p>Thank you for choosing 888Rent! Your car reservation has been confirmed. Below are the details of your booking:</p>
+            <p>Thank you for choosing 888Rent! Your car reservation has been sent. You will receive another email for confirmation. Below are the details of your booking:</p>
 
             <div class="details-section">
                 <h3>🚗 Vehicle Information</h3>

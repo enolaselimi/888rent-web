@@ -15,6 +15,7 @@ const AdminPage: React.FC = () => {
   const [showCarModal, setShowCarModal] = useState(false);
   const [editingCar, setEditingCar] = useState<CarType | null>(null);
   const [loading, setLoading] = useState(false);
+  const [newFeature, setNewFeature] = useState('');
   const [carFormData, setCarFormData] = useState({
     name: '',
     year: new Date().getFullYear(),
@@ -118,6 +119,7 @@ const AdminPage: React.FC = () => {
       setShowCarModal(false);
       setEditingCar(null);
       resetCarForm();
+      setNewFeature('');
     } catch (error) {
       console.error('Error saving car:', error);
       alert('Failed to save car. Please try again.');
@@ -139,6 +141,31 @@ const AdminPage: React.FC = () => {
       features: [],
       available: true
     });
+    setNewFeature('');
+  };
+
+  const addFeature = () => {
+    if (newFeature.trim() && !carFormData.features.includes(newFeature.trim())) {
+      setCarFormData(prev => ({
+        ...prev,
+        features: [...prev.features, newFeature.trim()]
+      }));
+      setNewFeature('');
+    }
+  };
+
+  const removeFeature = (featureToRemove: string) => {
+    setCarFormData(prev => ({
+      ...prev,
+      features: prev.features.filter(feature => feature !== featureToRemove)
+    }));
+  };
+
+  const handleFeatureKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addFeature();
+    }
   };
 
   const handleEditCar = (car: CarType) => {
@@ -624,7 +651,7 @@ const AdminPage: React.FC = () => {
                     Image URL
                   </label>
                   <input
-                    type="url"
+                    type="text"
                     value={carFormData.image}
                     onChange={(e) => setCarFormData(prev => ({ ...prev, image: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
@@ -644,6 +671,60 @@ const AdminPage: React.FC = () => {
                   />
                 </div>
 
+                {/* Features Section */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Car Features
+                  </label>
+                  
+                  {/* Add New Feature */}
+                  <div className="flex space-x-2 mb-3">
+                    <input
+                      type="text"
+                      value={newFeature}
+                      onChange={(e) => setNewFeature(e.target.value)}
+                      onKeyPress={handleFeatureKeyPress}
+                      placeholder="Add a feature (e.g., Air Conditioning, GPS, etc.)"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={addFeature}
+                      className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors flex items-center space-x-1"
+                    >
+                      <Plus className="h-4 w-4" />
+                      <span>Add</span>
+                    </button>
+                  </div>
+
+                  {/* Features List */}
+                  <div className="space-y-2 max-h-32 overflow-y-auto">
+                    {carFormData.features.length === 0 ? (
+                      <p className="text-sm text-gray-500 italic">No features added yet</p>
+                    ) : (
+                      carFormData.features.map((feature, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-md"
+                        >
+                          <span className="text-sm text-gray-700">{feature}</span>
+                          <button
+                            type="button"
+                            onClick={() => removeFeature(feature)}
+                            className="text-red-500 hover:text-red-700 transition-colors"
+                            title="Remove feature"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  
+                  <p className="text-xs text-gray-500 mt-2">
+                    Features help customers understand what's included with the car rental.
+                  </p>
+                </div>
                 <div className="flex items-center">
                   <input
                     type="checkbox"
@@ -664,6 +745,7 @@ const AdminPage: React.FC = () => {
                       setShowCarModal(false);
                       setEditingCar(null);
                       resetCarForm();
+                      setNewFeature('');
                     }}
                     className="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-700 font-medium py-2 px-4 rounded-md transition-colors"
                   >

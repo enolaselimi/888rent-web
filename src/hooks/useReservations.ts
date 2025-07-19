@@ -63,6 +63,21 @@ export const useReservations = () => {
     }
   };
 
+  const getReservationsBetweenDates = async (startDate: string, endDate: string) => {
+    const { data, error } = await supabase
+      .from('reservations')
+      .select('car_id, pickup_date, dropoff_date')
+      .or(`and(pickup_date.lte.${endDate},dropoff_date.gte.${startDate})`)
+      .eq('status', 'confirmed');
+
+    if (error) {
+      console.error('Error fetching overlapping reservations:', error.message);
+      return [];
+    }
+
+    return data;
+  };
+
   const createReservation = async (reservationData: Omit<Reservation, 'id' | 'createdAt'>) => {
     try {
       const { data, error } = await supabase
@@ -158,6 +173,7 @@ export const useReservations = () => {
     loading, 
     error, 
     refetch: fetchReservations,
+    getReservationsBetweenDates,
     createReservation,
     updateReservationStatus
   };
