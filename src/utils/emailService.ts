@@ -174,7 +174,6 @@ const generateReservationEmailHTML = (reservation: Reservation, car: Car): strin
 
             <div class="details-section">
                 <h3>🚗 Vehicle Information</h3>
-                <img src="${baseUrl}${car.image}" alt="${car.name}" class="car-image">
                 <div class="detail-row">
                     <span>Vehicle:</span>
                     <span><strong>${car.name}</strong></span>

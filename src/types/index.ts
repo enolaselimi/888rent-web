@@ -42,7 +42,7 @@ export interface Reservation {
 export interface Review {
   id: string;
   userId: string;
-  carId: string;
+  carId: string | null;
   reservationId: string;
   rating: number;
   comment: string;

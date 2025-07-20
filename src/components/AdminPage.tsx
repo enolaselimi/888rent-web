@@ -23,7 +23,7 @@ const AdminPage: React.FC = () => {
     transmission: 'Automatic',
     fuel: 'Petrol',
     price: 0,
-    image: '',
+    image: null as File | null,
     description: '',
     features: [] as string[],
     available: true
@@ -76,42 +76,50 @@ const AdminPage: React.FC = () => {
     setLoading(true);
 
     try {
-      if (editingCar) {
-        // Update existing car
-        const { error } = await supabase
-          .from('cars')
-          .update({
-            name: carFormData.name,
-            year: carFormData.year,
-            engine: carFormData.engine,
-            fuel_type: carFormData.fuel,
-            transmission: carFormData.transmission,
-            price_per_day: carFormData.price,
-            image_url: carFormData.image,
-            description: carFormData.description,
-            features: carFormData.features,
-            available: carFormData.available
-          })
-          .eq('id', editingCar.id);
+      let imageUrl = editingCar?.image || '';
 
-        if (error) throw error;
-      } else {
-        // Add new car
-        const { error } = await supabase
+      if (carFormData.image instanceof File) {
+        const fileExt = carFormData.image.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
           .from('cars')
-          .insert({
-            name: carFormData.name,
-            year: carFormData.year,
-            engine: carFormData.engine,
-            fuel_type: carFormData.fuel,
-            transmission: carFormData.transmission,
-            price_per_day: carFormData.price,
-            image_url: carFormData.image,
-            description: carFormData.description,
-            features: carFormData.features,
-            available: carFormData.available
+          .upload(filePath, carFormData.image, {
+            cacheControl: '3600',
+            upsert: false
           });
 
+        if (uploadError) throw uploadError;
+
+        const {
+          data: { publicUrl }
+        } = supabase.storage.from('cars').getPublicUrl(filePath);
+
+        imageUrl = publicUrl;
+      }
+
+      const carData = {
+        name: carFormData.name,
+        year: carFormData.year,
+        engine: carFormData.engine,
+        fuel_type: carFormData.fuel,
+        transmission: carFormData.transmission,
+        price_per_day: carFormData.price,
+        image_url: imageUrl,
+        description: carFormData.description,
+        features: carFormData.features,
+        available: carFormData.available
+      };
+
+      if (editingCar) {
+        const { error } = await supabase
+          .from('cars')
+          .update(carData)
+          .eq('id', editingCar.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from('cars').insert(carData);
         if (error) throw error;
       }
 
@@ -136,7 +144,7 @@ const AdminPage: React.FC = () => {
       transmission: 'Automatic',
       fuel: 'Petrol',
       price: 0,
-      image: '',
+      image: null,
       description: '',
       features: [],
       available: true
@@ -177,7 +185,7 @@ const AdminPage: React.FC = () => {
       transmission: car.transmission,
       fuel: car.fuel,
       price: car.price,
-      image: car.image,
+      image: null,
       description: car.description || '',
       features: car.features,
       available: car.available
@@ -203,7 +211,7 @@ const AdminPage: React.FC = () => {
     }
   };
 
-  const getCarById = (carId: string) => {
+  const getCarById = (carId: string | null) => {
     return cars.find(car => car.id === carId);
   };
 
@@ -647,15 +655,18 @@ const AdminPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Image URL
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Car Image</label>
                   <input
-                    type="text"
-                    value={carFormData.image}
-                    onChange={(e) => setCarFormData(prev => ({ ...prev, image: e.target.value }))}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) =>
+                      setCarFormData((prev) => ({
+                        ...prev,
+                        image: e.target.files?.[0] || null
+                      }))
+                    }
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                    required
+                    required={!editingCar} // only required when adding a new car
                   />
                 </div>
 
