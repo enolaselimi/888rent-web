@@ -32,6 +32,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
     userId: user?.id || null
   });
   const [filteredCars, setFilteredCars] = useState<CarType[]>(cars);
+  const [nextClicked, setNextClicked] = useState<boolean>(false);
 
   useEffect(() => {
     updateAvailableCars();
@@ -82,6 +83,31 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
     setFilteredCars(available);
   };
 
+  useEffect(() => {
+    if(step == 1 && selectedCarId){
+      setNextClicked(false);
+    }
+  },[step])
+
+  useEffect(() => {
+    const checkAndAutoAdvance = async () => {
+      if (selectedCarId && reservationData.pickupDate && reservationData.dropoffDate && nextClicked == true) {
+        const isSelectedCarAvailable = filteredCars.some(x => x.id == selectedCarId);
+          if (isSelectedCarAvailable) {
+            setReservationData(prev => ({ ...prev, selectedCarId }));
+            setStep(3); // Skip step 2 if car is available
+            showInfo('Car selected', 'Your selected car is available.');
+          } else {
+            setStep(2);
+            showError('Car not available', 'The selected car is not available on these dates. Please choose from the available options.');
+            setReservationData(prev => ({ ...prev, selectedCarId: '' }));
+          }
+      }
+    };
+
+    checkAndAutoAdvance();
+  }, [nextClicked, selectedCarId]);
+
   // const getAvailableCars = () => {
   //   return cars.filter(car => car.available);
   // };
@@ -125,7 +151,9 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
         showError('Invalid Date', 'Dropoff date must be after pickup date');
         return;
       }
-      
+      if (selectedCarId) {
+        setNextClicked(true);
+      }
       setStep(2);
     } else if (step === 2) {
       if (!reservationData.selectedCarId) {
@@ -160,6 +188,9 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
     setLoading(true);
 
     try {
+      if(reservationData.selectedCarId == ''){
+        showError('Car Not Selected', 'You have not selected a car. Please go back and try again.');
+      }
       const reservation: Omit<Reservation, 'id' | 'createdAt'> = {
         userId: reservationData.userId || null,
         carId: reservationData.selectedCarId,

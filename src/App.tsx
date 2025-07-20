@@ -17,7 +17,7 @@ const AppContent: React.FC = () => {
 
   const handleReserve = (carId: string) => {
     setSelectedCarId(carId);
-    setCurrentPage('reserve');
+    setCurrentPage('reserve-from-car');
   };
 
   const renderPage = () => {
@@ -29,6 +29,8 @@ const AppContent: React.FC = () => {
       case 'cars':
         return <CarsPage onReserve={handleReserve} />;
       case 'reserve':
+        return <ReservePage selectedCarId={''} />;
+      case 'reserve-from-car':
         return <ReservePage selectedCarId={selectedCarId} />;
       case 'profile':
         return <ProfilePage />;
