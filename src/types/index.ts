@@ -23,7 +23,7 @@ export interface User {
 export interface Reservation {
   id: string;
   userId?: string | null;
-  carId: string;
+  carId: string | null;
   fullName: string;
   email: string;
   phone: string;
