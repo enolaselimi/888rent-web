@@ -19,7 +19,7 @@ const ProfilePage: React.FC = () => {
   });
   const [submittingReview, setSubmittingReview] = useState(false);
 
-  const getCarById = (carId: string) => {
+  const getCarById = (carId: string | null) => {
     return cars.find(car => car.id === carId);
   };
 
