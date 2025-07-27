@@ -23,9 +23,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   
   const mounted = useRef(true);
 
-  useEffect(() => {
-
-    const initializeAuth = async () => {
+  const initializeAuth = async () => {
       try {
         setIsLoading(true);
         const { data: { session }, error } = await supabase.auth.getSession();
@@ -59,7 +57,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(null);
         setIsLoading(false);
       }
-    };
+  };
+
+  useEffect(() => {
 
     initializeAuth();
 
