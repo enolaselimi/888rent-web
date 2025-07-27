@@ -139,7 +139,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 isAdmin: newProfile.is_admin || false
               };
               console.log('Created and set user profile:', userProfile);
-              if (mounted){
+              if (mounted.current){
                 setUser(userProfile);
                 setIsLoading(false);
               }
@@ -161,7 +161,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           isAdmin: data.is_admin || false
         };
         console.log('Set user profile:', userProfile);
-        if (mounted){
+        if (mounted.current){
           setUser(userProfile);
           setIsLoading(false);
         }
