@@ -96,6 +96,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .eq('id', userId)
         .single();
 
+      console.log("Query Sent");
+      
       if (error) {
         console.error('Error fetching user profile:', error);
         

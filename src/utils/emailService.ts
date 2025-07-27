@@ -49,7 +49,7 @@ export const sendReservationConfirmation = async (
   }
 };
 
-const baseUrl = 'https://888rentcar.com'; 
+const baseUrl = 'https://8rentcars.com'; 
 
 const generateReservationEmailHTML = (reservation: Reservation, car: Car): string => {
   return `
