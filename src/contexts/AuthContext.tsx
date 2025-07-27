@@ -28,7 +28,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const initializeAuth = async () => {
       try {
         setIsLoading(true);
-        mounted.current = true;
         const { data: { session }, error } = await supabase.auth.getSession();
 
         if (error) {
@@ -96,7 +95,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .select('*')
         .eq('id', userId)
         .single();
-      console.log("USER === "+data);
+
+      console.log("Query Sent");
+      
       if (error) {
         console.error('Error fetching user profile:', error);
         
