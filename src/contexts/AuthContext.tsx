@@ -28,8 +28,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const initializeAuth = async () => {
       try {
         setIsLoading(true);
+        mounted.current = true;
         const { data: { session }, error } = await supabase.auth.getSession();
-        console.log("SESSION: "+session);
 
         if (error) {
           console.error('Error getting session:', error);
@@ -40,8 +40,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
 
         const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
-        console.log("USER: "+user);
-
+        
         if (userError) {
           console.error('Error getting user:', userError);
           setUser(null);
