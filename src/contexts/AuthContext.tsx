@@ -96,8 +96,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .eq('id', userId)
         .single();
 
-      console.log("Query Sent");
-      
       if (error) {
         console.error('Error fetching user profile:', error);
         
@@ -139,7 +137,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 isAdmin: newProfile.is_admin || false
               };
               console.log('Created and set user profile:', userProfile);
-              if (mounted.current){
+              if (mounted){
                 setUser(userProfile);
                 setIsLoading(false);
               }
@@ -161,7 +159,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           isAdmin: data.is_admin || false
         };
         console.log('Set user profile:', userProfile);
-        if (mounted.current){
+        if (mounted){
           setUser(userProfile);
           setIsLoading(false);
         }
