@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
 
         const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
-        
+
         if (userError) {
           console.error('Error getting user:', userError);
           setUser(null);
@@ -96,7 +96,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .select('*')
         .eq('id', userId)
         .single();
-
+      console.log("USER === "+data);
       if (error) {
         console.error('Error fetching user profile:', error);
         
