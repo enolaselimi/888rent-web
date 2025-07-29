@@ -22,6 +22,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
   
   const mounted = useRef(true);
+  const hasHandledSignIn = useRef(false);
+  const hasInitialized = useRef(false);
 
   const initializeAuth = async () => {
       try {
@@ -60,9 +62,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const hasHandledSignIn = useRef(false);
-    const hasInitialized = useRef(false);
-
     const setup = async () => {
       await initializeAuth();
       hasInitialized.current = true;
