@@ -37,7 +37,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
 
         const { data: { user: authUser }, error: userError } = await supabase.auth.getUser();
-
+        
         if (userError) {
           console.error('Error getting user:', userError);
           setUser(null);
@@ -60,23 +60,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
+    const hasHandledSignIn = useRef(false);
+    const hasInitialized = useRef(false);
 
-    initializeAuth();
+    const setup = async () => {
+      await initializeAuth();
+      hasInitialized.current = true;
+    };
 
-    // Listen for auth changes
+    setup();
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (!mounted.current) return;
 
       console.log('Auth state changed:', event, !!session?.user);
 
-      if (event === 'SIGNED_OUT' || !session?.user) {
-        setUser(null);
-        setIsLoading(false);
-      } else if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        if (session?.user) {
-          console.log('Auth state change - fetching profile for:', session.user.id);
-          await fetchUserProfile(session.user.id);
-        }
+      // Only handle SIGNED_IN if the app hasn't already initialized the user
+      if (event === 'SIGNED_IN' && session?.user && !hasHandledSignIn.current && !hasInitialized.current) {
+        hasHandledSignIn.current = true;
+        console.log('Handling first-time SIGNED_IN event');
+        await fetchUserProfile(session.user.id);
       }
     });
 
@@ -85,6 +88,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       subscription.unsubscribe();
     };
   }, []);
+
 
   const fetchUserProfile = async (userId: string) => {
     try {
