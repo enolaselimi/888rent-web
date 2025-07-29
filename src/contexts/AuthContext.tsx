@@ -24,6 +24,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const mounted = useRef(true);
   const hasHandledSignIn = useRef(false);
   const hasInitialized = useRef(false);
+  const unsubscribeRef = useRef<() => void>();
 
   const initializeAuth = async () => {
       try {
@@ -62,31 +63,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    const setup = async () => {
-      await initializeAuth();
-      hasInitialized.current = true;
-    };
+  const setup = async () => {
+    await initializeAuth();
+    hasInitialized.current = true;
 
-    setup();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (!mounted.current) return;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (!mounted.current) return;
+        console.log('Auth state changed:', event, !!session?.user);
 
-      console.log('Auth state changed:', event, !!session?.user);
-
-      // Only handle SIGNED_IN if the app hasn't already initialized the user
-      if (event === 'SIGNED_IN' && session?.user && !hasHandledSignIn.current && !hasInitialized.current) {
-        hasHandledSignIn.current = true;
-        console.log('Handling first-time SIGNED_IN event');
-        await fetchUserProfile(session.user.id);
+        if (
+          event === 'SIGNED_IN' &&
+          session?.user &&
+          !hasHandledSignIn.current
+        ) {
+          hasHandledSignIn.current = true;
+          console.log('Handling first-time SIGNED_IN event');
+          await fetchUserProfile(session.user.id);
+        }
       }
-    });
+    );
 
-    return () => {
-      mounted.current = false;
-      subscription.unsubscribe();
-    };
-  }, []);
+    // Store unsubscribe function
+    unsubscribeRef.current = subscription.unsubscribe;
+  };
+
+  setup();
+
+  return () => {
+    mounted.current = false;
+    unsubscribeRef.current?.();
+  };
+}, []);
 
 
   const fetchUserProfile = async (userId: string) => {
