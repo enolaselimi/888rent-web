@@ -1,5 +1,7 @@
 import React from 'react';
-import { useTranslation } from '../contexts/TranslationContext'
+
+import { useTranslation } from '../contexts/TranslationContext';
+
 
 const LanguageToggle: React.FC = () => {
   const { language, setLanguage } = useTranslation();
