@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Car, MapPin, Star, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { useTranslation } from '../contexts/TranslationContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useReservations } from '../hooks/useReservations';
 import { useReviews } from '../hooks/useReviews';
@@ -8,6 +9,7 @@ import { Reservation, Review } from '../types';
 
 const ProfilePage: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { cars } = useCars();
   const { reservations, loading: reservationsLoading } = useReservations();
   const { reviews, createReview } = useReviews();
@@ -96,7 +98,7 @@ const ProfilePage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Please log in to view your profile</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('profile.login.required')}</h2>
         </div>
       </div>
     );
@@ -108,7 +110,7 @@ const ProfilePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading your profile...</p>
+            <p className="mt-4 text-gray-600">{t('profile.loading')}</p>
           </div>
         </div>
       </div>
@@ -121,19 +123,19 @@ const ProfilePage: React.FC = () => {
         {/* Header */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user.fullName}!
+            {t('profile.title')}, {user.fullName}!
           </h1>
-          <p className="text-gray-600">Manage your reservations and reviews</p>
+          <p className="text-gray-600">{t('profile.subtitle')}</p>
         </div>
 
         {/* Reservations */}
         <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">My Reservations</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('profile.reservations')}</h2>
           
           {reservations.length === 0 ? (
             <div className="text-center py-8">
               <Car className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">No reservations yet</p>
+              <p className="text-gray-600">{t('profile.no.reservations')}</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -169,7 +171,7 @@ const ProfilePage: React.FC = () => {
                       <div className="mt-4 md:mt-0 flex flex-col items-end space-y-2">
                         <div className={`flex items-center space-x-1 px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(reservation.status)}`}>
                           {getStatusIcon(reservation.status)}
-                          <span className="capitalize">{reservation.status}</span>
+                          <span className="capitalize">{t(`common.${reservation.status}`)}</span>
                         </div>
                         <div className="text-lg font-bold text-gray-900">
                           €{reservation.totalPrice}
@@ -182,7 +184,7 @@ const ProfilePage: React.FC = () => {
                             }}
                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
                           >
-                            Write Review
+                            {t('profile.write.review')}
                           </button>
                         )}
                       </div>
@@ -196,12 +198,12 @@ const ProfilePage: React.FC = () => {
 
         {/* Reviews */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">My Reviews</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('profile.reviews')}</h2>
           
           {reviews.length === 0 ? (
             <div className="text-center py-8">
               <Star className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-600">No reviews yet</p>
+              <p className="text-gray-600">{t('profile.no.reviews')}</p>
             </div>
           ) : (
             <div className="space-y-4">

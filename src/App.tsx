@@ -8,6 +8,7 @@ import CarsPage from './components/CarsPage';
 import ReservePage from './components/ReservePage';
 import ProfilePage from './components/ProfilePage';
 import AdminPage from './components/AdminPage';
+import { TranslationProvider } from './contexts/TranslationContext';
 
 // Inner component that waits for auth to load before rendering app content
 const AppContent: React.FC = () => {
@@ -73,9 +74,11 @@ const AppContent: React.FC = () => {
 function App() {
   return (
     <ToastProvider>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
+      <TranslationProvider>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </TranslationProvider>
     </ToastProvider>
   );
 }

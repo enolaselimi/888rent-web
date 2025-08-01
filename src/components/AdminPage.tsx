@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Car, Users, Calendar, Plus, Edit, Trash2, Eye } from 'lucide-react';
+import { useTranslation } from '../contexts/TranslationContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useCars } from '../hooks/useCars';
 import { useReservations } from '../hooks/useReservations';
@@ -8,6 +9,7 @@ import { Car as CarType, Reservation, User } from '../types';
 
 const AdminPage: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { cars, refetch: refetchCars } = useCars();
   const { reservations, updateReservationStatus } = useReservations();
   const [activeTab, setActiveTab] = useState('overview');
@@ -64,8 +66,8 @@ const AdminPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h2>
-          <p className="text-gray-600">You don't have permission to access this page.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">{t('admin.access.denied')}</h2>
+          <p className="text-gray-600">{t('admin.no.permission')}</p>
         </div>
       </div>
     );
@@ -231,8 +233,8 @@ const AdminPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600">Manage your car rental business</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('admin.title')}</h1>
+          <p className="text-gray-600">{t('admin.subtitle')}</p>
         </div>
 
         {/* Tabs */}
@@ -240,10 +242,10 @@ const AdminPage: React.FC = () => {
           <div className="border-b border-gray-200">
             <nav className="flex space-x-8 px-6">
               {[
-                { id: 'overview', label: 'Overview', icon: Calendar },
-                { id: 'cars', label: 'Cars', icon: Car },
-                { id: 'reservations', label: 'Reservations', icon: Calendar },
-                { id: 'users', label: 'Users', icon: Users }
+                { id: 'overview', label: t('admin.overview'), icon: Calendar },
+                { id: 'cars', label: t('admin.cars'), icon: Car },
+                { id: 'reservations', label: t('admin.reservations'), icon: Calendar },
+                { id: 'users', label: t('admin.users'), icon: Users }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -265,14 +267,14 @@ const AdminPage: React.FC = () => {
             {/* Overview Tab */}
             {activeTab === 'overview' && (
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Business Overview</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('admin.business.overview')}</h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div className="bg-blue-50 p-6 rounded-lg">
                     <div className="flex items-center">
                       <Car className="h-8 w-8 text-blue-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-blue-600">Total Cars</p>
+                        <p className="text-sm font-medium text-blue-600">{t('admin.total.cars')}</p>
                         <p className="text-2xl font-bold text-blue-900">{stats.totalCars}</p>
                       </div>
                     </div>
@@ -282,7 +284,7 @@ const AdminPage: React.FC = () => {
                     <div className="flex items-center">
                       <Calendar className="h-8 w-8 text-green-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-green-600">Active Reservations</p>
+                        <p className="text-sm font-medium text-green-600">{t('admin.active.reservations')}</p>
                         <p className="text-2xl font-bold text-green-900">{stats.activeReservations}</p>
                       </div>
                     </div>
@@ -292,7 +294,7 @@ const AdminPage: React.FC = () => {
                     <div className="flex items-center">
                       <Users className="h-8 w-8 text-purple-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-purple-600">Total Users</p>
+                        <p className="text-sm font-medium text-purple-600">{t('admin.total.users')}</p>
                         <p className="text-2xl font-bold text-purple-900">{stats.totalUsers}</p>
                       </div>
                     </div>
@@ -302,7 +304,7 @@ const AdminPage: React.FC = () => {
                     <div className="flex items-center">
                       <Car className="h-8 w-8 text-red-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-red-600">Available Cars</p>
+                        <p className="text-sm font-medium text-red-600">{t('admin.available.cars')}</p>
                         <p className="text-2xl font-bold text-red-900">{stats.availableCars}</p>
                       </div>
                     </div>
@@ -312,7 +314,7 @@ const AdminPage: React.FC = () => {
                     <div className="flex items-center">
                       <Calendar className="h-8 w-8 text-yellow-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-yellow-600">Total Reservations</p>
+                        <p className="text-sm font-medium text-yellow-600">{t('admin.total.reservations')}</p>
                         <p className="text-2xl font-bold text-yellow-900">{stats.totalReservations}</p>
                       </div>
                     </div>
@@ -322,7 +324,7 @@ const AdminPage: React.FC = () => {
                     <div className="flex items-center">
                       <div className="text-2xl">€</div>
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-indigo-600">Total Revenue</p>
+                        <p className="text-sm font-medium text-indigo-600">{t('admin.total.revenue')}</p>
                         <p className="text-2xl font-bold text-indigo-900">€{stats.totalRevenue}</p>
                       </div>
                     </div>
@@ -335,13 +337,13 @@ const AdminPage: React.FC = () => {
             {activeTab === 'cars' && (
               <div>
                 <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-gray-900">Manage Cars</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">{t('admin.manage.cars')}</h2>
                   <button
                     onClick={() => setShowCarModal(true)}
                     className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors flex items-center space-x-2"
                   >
                     <Plus className="h-4 w-4" />
-                    <span>Add Car</span>
+                    <span>{t('admin.add.car')}</span>
                   </button>
                 </div>
 
@@ -363,7 +365,7 @@ const AdminPage: React.FC = () => {
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                             car.available ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                           }`}>
-                            {car.available ? 'Available' : 'Unavailable'}
+                            {car.available ? t('admin.available') : t('admin.unavailable')}
                           </span>
                         </div>
                         <div className="flex space-x-2">
@@ -372,14 +374,14 @@ const AdminPage: React.FC = () => {
                             className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded-md text-sm font-medium transition-colors flex items-center justify-center space-x-1"
                           >
                             <Edit className="h-4 w-4" />
-                            <span>Edit</span>
+                            <span>{t('admin.edit')}</span>
                           </button>
                           <button
                             onClick={() => handleDeleteCar(car.id)}
                             className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 px-3 rounded-md text-sm font-medium transition-colors flex items-center justify-center space-x-1"
                           >
                             <Trash2 className="h-4 w-4" />
-                            <span>Delete</span>
+                            <span>{t('admin.delete')}</span>
                           </button>
                         </div>
                       </div>
@@ -392,29 +394,29 @@ const AdminPage: React.FC = () => {
             {/* Reservations Tab */}
             {activeTab === 'reservations' && (
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Manage Reservations</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('admin.manage.reservations')}</h2>
                 
                 <div className="overflow-x-auto">
                   <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Customer
+                          {t('admin.customer')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Car
+                          {t('admin.car')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Dates
+                          {t('admin.dates')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Total
+                          {t('admin.total')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Status
+                          {t('admin.status')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Actions
+                          {t('admin.actions')}
                         </th>
                       </tr>
                     </thead>
@@ -459,7 +461,7 @@ const AdminPage: React.FC = () => {
                                   ? 'bg-red-100 text-red-800'
                                   : 'bg-yellow-100 text-yellow-800'
                               }`}>
-                                {reservation.status}
+                                {t(`common.${reservation.status}`)}
                               </span>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -470,13 +472,13 @@ const AdminPage: React.FC = () => {
                                       onClick={() => updateReservationStatus(reservation.id, 'confirmed')}
                                       className="text-green-600 hover:text-green-900"
                                     >
-                                      Confirm
+                                      {t('admin.confirm')}
                                     </button>
                                     <button
                                       onClick={() => updateReservationStatus(reservation.id, 'cancelled')}
                                       className="text-red-600 hover:text-red-900"
                                     >
-                                      Cancel
+                                      {t('admin.cancel')}
                                     </button>
                                   </>
                                 )}
@@ -494,26 +496,26 @@ const AdminPage: React.FC = () => {
             {/* Users Tab */}
             {activeTab === 'users' && (
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Registered Users</h2>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">{t('admin.registered.users')}</h2>
                 
                 <div className="overflow-x-auto">
                   <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                     <thead className="bg-gray-50">
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Name
+                          {t('admin.name')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Email
+                          {t('admin.email')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Phone
+                          {t('admin.phone')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Reservations
+                          {t('admin.reservations')}
                         </th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Role
+                          {t('admin.role')}
                         </th>
                       </tr>
                     </thead>
@@ -546,7 +548,7 @@ const AdminPage: React.FC = () => {
                               <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                                 user.isAdmin ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
                               }`}>
-                                {user.isAdmin ? 'Admin' : 'User'}
+                                {user.isAdmin ? t('admin.admin') : t('admin.user')}
                               </span>
                             </td>
                           </tr>

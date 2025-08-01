@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Eye, EyeOff } from 'lucide-react';
+import { useTranslation } from '../contexts/TranslationContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 
@@ -11,6 +12,7 @@ interface AuthModalProps {
 
 const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose, onSwitchMode }) => {
   const { login, register } = useAuth();
+  const { t } = useTranslation();
   const { showSuccess, showError } = useToast();
   const [formData, setFormData] = useState({
     email: '',
@@ -86,7 +88,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose, onSwitchMode }) =>
       <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
         <div className="flex justify-between items-center p-6 border-b">
           <h2 className="text-xl font-semibold text-gray-900">
-            {mode === 'login' ? 'Sign In' : 'Create Account'}
+            {mode === 'login' ? t('auth.signin') : t('auth.create.account')}
           </h2>
           <button
             onClick={onClose}
@@ -101,7 +103,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose, onSwitchMode }) =>
             <>
               <div>
                 <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
+                  {t('auth.full.name')}
                 </label>
                 <input
                   type="text"
@@ -116,7 +118,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose, onSwitchMode }) =>
 
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone Number
+                  {t('auth.phone.number')}
                 </label>
                 <input
                   type="tel"
@@ -133,7 +135,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose, onSwitchMode }) =>
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-              {mode === 'login' ? 'Email Address or Username' : 'Email Address'}
+              {mode === 'login' ? t('auth.email.username') : t('auth.email.address')}
             </label>
             <input
               type={mode === 'login' ? 'text' : 'email'}
@@ -149,7 +151,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose, onSwitchMode }) =>
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
+              {t('auth.password')}
             </label>
             <div className="relative">
               <input
@@ -176,18 +178,18 @@ const AuthModal: React.FC<AuthModalProps> = ({ mode, onClose, onSwitchMode }) =>
             disabled={loading}
             className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Please wait...' : (mode === 'login' ? 'Sign In' : 'Create Account')}
+            {loading ? t('auth.please.wait') : (mode === 'login' ? t('auth.signin') : t('auth.create.account'))}
           </button>
         </form>
 
         <div className="px-6 pb-6 text-center">
           <p className="text-sm text-gray-600">
-            {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
+            {mode === 'login' ? t('auth.no.account') + ' ' : t('auth.have.account') + ' '}
             <button
               onClick={() => onSwitchMode(mode === 'login' ? 'register' : 'login')}
               className="text-red-500 hover:text-red-600 font-medium"
             >
-              {mode === 'login' ? 'Sign up' : 'Sign in'}
+              {mode === 'login' ? t('auth.sign.up') : t('auth.sign.in')}
             </button>
           </p>
         </div>
