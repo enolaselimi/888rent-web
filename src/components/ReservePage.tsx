@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, Clock, MapPin, Car, User, Phone, Mail, Upload, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useTranslation } from '../contexts/TranslationContext';
 import { useCars } from '../hooks/useCars';
 import { useReservations } from '../hooks/useReservations';
 import { Car as CarType, Reservation } from '../types';
@@ -12,6 +13,7 @@ interface ReservePageProps {
 
 const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { cars } = useCars();
   const { createReservation, getReservationsBetweenDates} = useReservations();
   const { showSuccess, showError, showInfo } = useToast();
@@ -245,7 +247,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Reserve Your Car</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">{t('reserve.title')}</h1>
           <div className="flex justify-center items-center space-x-4">
             {[1, 2, 3].map((stepNumber) => (
               <div key={stepNumber} className="flex items-center">
@@ -263,28 +265,28 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
             ))}
           </div>
           <div className="flex justify-center space-x-8 mt-2 text-sm text-gray-600">
-            <span className={step >= 1 ? 'text-red-500 font-medium' : ''}>Dates & Location</span>
-            <span className={step >= 2 ? 'text-red-500 font-medium' : ''}>Select Car</span>
-            <span className={step >= 3 ? 'text-red-500 font-medium' : ''}>Customer Details</span>
+            <span className={step >= 1 ? 'text-red-500 font-medium' : ''}>{t('reserve.step.dates')}</span>
+            <span className={step >= 2 ? 'text-red-500 font-medium' : ''}>{t('reserve.step.car')}</span>
+            <span className={step >= 3 ? 'text-red-500 font-medium' : ''}>{t('reserve.step.details')}</span>
           </div>
         </div>
 
         {/* Step 1: Dates and Locations */}
         {step === 1 && (
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-6">When and Where?</h2>
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">{t('reserve.when.where')}</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Pickup */}
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900 flex items-center">
                   <MapPin className="h-5 w-5 text-red-500 mr-2" />
-                  Pickup Details
+                  {t('reserve.pickup.details')}
                 </h3>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Pickup Date
+                    {t('reserve.pickup.date')}
                   </label>
                   <input
                     type="date"
@@ -297,14 +299,14 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Pickup Time
+                    {t('reserve.pickup.time')}
                   </label>
                   <select
                     value={reservationData.pickupTime}
                     onChange={(e) => handleInputChange('pickupTime', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                   >
-                    <option value="">Select time</option>
+                    <option value="">{t('reserve.select.time')}</option>
                     {timeSlots.map(time => (
                       <option key={time} value={time}>{time}</option>
                     ))}
@@ -313,14 +315,14 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Pickup Location
+                    {t('reserve.pickup.location')}
                   </label>
                   <select
                     value={reservationData.pickupLocation}
                     onChange={(e) => handleInputChange('pickupLocation', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                   >
-                    <option value="">Select location</option>
+                    <option value="">{t('reserve.select.location')}</option>
                     {locations.map(location => (
                       <option key={location} value={location}>{location}</option>
                     ))}
@@ -332,12 +334,12 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
               <div className="space-y-4">
                 <h3 className="text-lg font-medium text-gray-900 flex items-center">
                   <MapPin className="h-5 w-5 text-red-500 mr-2" />
-                  Dropoff Details
+                  {t('reserve.dropoff.details')}
                 </h3>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Dropoff Date
+                    {t('reserve.dropoff.date')}
                   </label>
                   <input
                     type="date"
@@ -350,14 +352,14 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Dropoff Time
+                    {t('reserve.dropoff.time')}
                   </label>
                   <select
                     value={reservationData.dropoffTime}
                     onChange={(e) => handleInputChange('dropoffTime', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                   >
-                    <option value="">Select time</option>
+                    <option value="">{t('reserve.select.time')}</option>
                     {timeSlots.map(time => (
                       <option key={time} value={time}>{time}</option>
                     ))}
@@ -366,14 +368,14 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Dropoff Location
+                    {t('reserve.dropoff.location')}
                   </label>
                   <select
                     value={reservationData.dropoffLocation}
                     onChange={(e) => handleInputChange('dropoffLocation', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                   >
-                    <option value="">Select location</option>
+                    <option value="">{t('reserve.select.location')}</option>
                     {locations.map(location => (
                       <option key={location} value={location}>{location}</option>
                     ))}
@@ -387,7 +389,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
                 onClick={handleNext}
                 className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-6 rounded-md transition-colors flex items-center space-x-2"
               >
-                <span>Next</span>
+                <span>{t('reserve.next')}</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -398,13 +400,13 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
         {step === 2 && (
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Available Cars</h2>
+              <h2 className="text-xl font-semibold text-gray-900">{t('reserve.available.cars')}</h2>
               <button
                 onClick={() => setStep(1)}
                 className="text-gray-600 hover:text-gray-800 flex items-center space-x-1"
               >
                 <ArrowLeft className="h-4 w-4" />
-                <span>Back</span>
+                <span>{t('reserve.back')}</span>
               </button>
             </div>
 
@@ -429,7 +431,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
                     {car.year} • {car.engine} • {car.transmission}
                   </p>
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-red-500">€{car.price}/day</span>
+                    <span className="text-lg font-bold text-red-500">€{car.price}/{t('common.day')}</span>
                     {reservationData.selectedCarId === car.id && (
                       <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
                         <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -445,7 +447,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
                 onClick={handleNext}
                 className="bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-6 rounded-md transition-colors flex items-center space-x-2"
               >
-                <span>Next</span>
+                <span>{t('reserve.next')}</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>
@@ -456,13 +458,13 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
         {step === 3 && (
           <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Customer Details</h2>
+              <h2 className="text-xl font-semibold text-gray-900">{t('reserve.customer.details')}</h2>
               <button
                 onClick={() => setStep(2)}
                 className="text-gray-600 hover:text-gray-800 flex items-center space-x-1"
               >
                 <ArrowLeft className="h-4 w-4" />
-                <span>Back</span>
+                <span>{t('reserve.back')}</span>
               </button>
             </div>
 
@@ -470,7 +472,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name *
+                    {t('reserve.full.name')} *
                   </label>
                   <input
                     type="text"
@@ -483,7 +485,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email Address *
+                    {t('reserve.email')} *
                   </label>
                   <input
                     type="email"
@@ -496,7 +498,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number *
+                    {t('reserve.phone')} *
                   </label>
                   <input
                     type="tel"
@@ -509,7 +511,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Upload Driver's License
+                    {t('reserve.license')}
                   </label>
                   <input
                     type="file"
@@ -522,27 +524,27 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
 
               {/* Reservation Summary */}
               <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-gray-900 mb-3">Reservation Summary</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">{t('reserve.summary')}</h3>
                 {getSelectedCar() && (
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span>Car:</span>
+                      <span>{t('reserve.car')}:</span>
                       <span>{getSelectedCar()?.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Pickup:</span>
+                      <span>{t('reserve.pickup')}:</span>
                       <span>{reservationData.pickupDate} at {reservationData.pickupTime}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Dropoff:</span>
+                      <span>{t('reserve.dropoff')}:</span>
                       <span>{reservationData.dropoffDate} at {reservationData.dropoffTime}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Location:</span>
+                      <span>{t('reserve.location')}:</span>
                       <span>{reservationData.pickupLocation}</span>
                     </div>
                     <div className="flex justify-between font-semibold text-lg border-t pt-2">
-                      <span>Total:</span>
+                      <span>{t('reserve.total')}:</span>
                       <span className="text-red-500">€{calculateTotalPrice()}</span>
                     </div>
                   </div>
@@ -554,7 +556,7 @@ const ReservePage: React.FC<ReservePageProps> = ({ selectedCarId }) => {
                 disabled={loading}
                 className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Creating Reservation...' : 'Confirm Reservation'}
+                {loading ? t('reserve.creating') : t('reserve.confirm')}
               </button>
             </form>
           </div>

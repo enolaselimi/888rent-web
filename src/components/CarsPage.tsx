@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, Star, Calendar, Users, Fuel, Settings } from 'lucide-react';
+import { useTranslation } from '../contexts/TranslationContext';
 import { useCars } from '../hooks/useCars';
 import { useReviews } from '../hooks/useReviews';
 import { Car, Review } from '../types';
@@ -10,6 +11,7 @@ interface CarsPageProps {
 
 const CarsPage: React.FC<CarsPageProps> = ({ onReserve }) => {
   const { cars, loading: carsLoading } = useCars();
+  const { t } = useTranslation();
   const [expandedCar, setExpandedCar] = useState<string | null>(null);
 
   const getCarReviews = (carId: string) => {
@@ -44,7 +46,7 @@ const CarsPage: React.FC<CarsPageProps> = ({ onReserve }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading cars...</p>
+            <p className="mt-4 text-gray-600">{t('cars.loading')}</p>
           </div>
         </div>
       </div>
@@ -57,11 +59,10 @@ const CarsPage: React.FC<CarsPageProps> = ({ onReserve }) => {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Our Premium Fleet
+            {t('cars.title')}
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Choose from our carefully selected collection of premium vehicles. 
-            Each car is maintained to the highest standards and ready for your journey.
+            {t('cars.subtitle')}
           </p>
         </div>
 
@@ -153,15 +154,15 @@ const CarCard: React.FC<CarCardProps> = ({
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <Users className="h-4 w-4" />
-            <span>5 Seats</span>
+            <span>5 {t('cars.seats')}</span>
           </div>
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <Fuel className="h-4 w-4" />
-            <span>{car.fuel}</span>
+            <span>{t(`common.${car.fuel.toLowerCase().replace(' + ', '.').replace(' ', '.')}`) || car.fuel}</span>
           </div>
           <div className="flex items-center space-x-2 text-sm text-gray-600">
             <Settings className="h-4 w-4" />
-            <span>{car.transmission}</span>
+            <span>{t(`common.${car.transmission.toLowerCase()}`) || car.transmission}</span>
           </div>
         </div>
 
@@ -170,7 +171,7 @@ const CarCard: React.FC<CarCardProps> = ({
           onClick={onToggleExpanded}
           className="flex items-center space-x-1 text-red-500 hover:text-red-600 transition-colors mb-4"
         >
-          <span>See more</span>
+          <span>{t('cars.see.more')}</span>
           {isExpanded ? (
             <ChevronUp className="h-4 w-4" />
           ) : (
@@ -184,14 +185,14 @@ const CarCard: React.FC<CarCardProps> = ({
             {/* Description */}
             {car.description && (
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Description</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">{t('cars.description')}</h4>
                 <p className="text-gray-600 text-sm">{car.description}</p>
               </div>
             )}
 
             {/* Features */}
             <div>
-              <h4 className="font-semibold text-gray-900 mb-2">Features</h4>
+              <h4 className="font-semibold text-gray-900 mb-2">{t('cars.features')}</h4>
               <div className="flex flex-wrap gap-2">
                 {car.features.map((feature, index) => (
                   <span
@@ -207,7 +208,7 @@ const CarCard: React.FC<CarCardProps> = ({
             {/* Reviews */}
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">
-                Customer Reviews ({reviews.length})
+                {t('cars.reviews')} ({reviews.length})
               </h4>
               {reviewsLoading ? (
                 <div className="text-center py-4">
@@ -237,7 +238,7 @@ const CarCard: React.FC<CarCardProps> = ({
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-500 text-sm">No reviews yet</p>
+                <p className="text-gray-500 text-sm">{t('cars.no.reviews')}</p>
               )}
             </div>
           </div>
@@ -249,7 +250,7 @@ const CarCard: React.FC<CarCardProps> = ({
           className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
         >
           <Calendar className="h-5 w-5" />
-          <span>Reserve Now</span>
+          <span>{t('cars.reserve.now')}</span>
         </button>
       </div>
     </div>

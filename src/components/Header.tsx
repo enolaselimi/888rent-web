@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Car, User, LogIn, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useTranslation } from '../contexts/TranslationContext';
 import AuthModal from './AuthModal';
+import LanguageToggle from './LanguageToggle';
 
 interface HeaderProps {
   currentPage: string;
@@ -10,6 +12,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -20,18 +23,18 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
   };
 
   const menuItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About Us' },
-    { id: 'cars', label: 'Cars' },
-    { id: 'reserve', label: 'Reserve' },
+    { id: 'home', label: t('nav.home') },
+    { id: 'about', label: t('nav.about') },
+    { id: 'cars', label: t('nav.cars') },
+    { id: 'reserve', label: t('nav.reserve') },
   ];
 
   if (user?.isAdmin) {
-    menuItems.push({ id: 'admin', label: 'Admin Panel' });
+    menuItems.push({ id: 'admin', label: t('nav.admin') });
   }
 
   if (user && !user.isAdmin) {
-    menuItems.push({ id: 'profile', label: 'My Reservations' });
+    menuItems.push({ id: 'profile', label: t('nav.profile') });
   }
 
   return (
@@ -65,18 +68,19 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
             </nav>
 
             {/* Auth Buttons */}
-            <div className="hidden md:flex items-center space-x-4">
+            <div className="hidden md:flex items-center space-x-3">
+              <LanguageToggle />
               {user ? (
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-gray-300">
-                    Welcome, {user.fullName}
+                    {t('nav.welcome')}, {user.fullName}
                   </span>
                   <button
                     onClick={logout}
                     className="flex items-center space-x-1 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
-                    <span>Logout</span>
+                    <span>{t('nav.logout')}</span>
                   </button>
                 </div>
               ) : (
@@ -86,14 +90,14 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
                     className="flex items-center space-x-1 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                   >
                     <LogIn className="h-4 w-4" />
-                    <span>Login</span>
+                    <span>{t('nav.login')}</span>
                   </button>
                   <button
                     onClick={() => handleAuthClick('register')}
                     className="flex items-center space-x-1 bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md text-sm font-medium transition-colors"
                   >
                     <User className="h-4 w-4" />
-                    <span>Sign Up</span>
+                    <span>{t('nav.signup')}</span>
                   </button>
                 </div>
               )}
@@ -133,10 +137,13 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
                 
                 {/* Mobile Auth Buttons */}
                 <div className="pt-4 border-t border-gray-700">
+                  <div className="px-3 py-2 mb-2">
+                    <LanguageToggle />
+                  </div>
                   {user ? (
                     <div className="space-y-2">
                       <div className="px-3 py-2 text-sm text-gray-300">
-                        Welcome, {user.fullName}
+                        {t('nav.welcome')}, {user.fullName}
                       </div>
                       <button
                         onClick={() => {
@@ -146,7 +153,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
                         className="flex items-center space-x-1 bg-red-500 hover:bg-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors w-full"
                       >
                         <LogOut className="h-4 w-4" />
-                        <span>Logout</span>
+                        <span>{t('nav.logout')}</span>
                       </button>
                     </div>
                   ) : (
@@ -159,7 +166,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
                         className="flex items-center space-x-1 bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-md text-sm font-medium transition-colors w-full"
                       >
                         <LogIn className="h-4 w-4" />
-                        <span>Login</span>
+                        <span>{t('nav.login')}</span>
                       </button>
                       <button
                         onClick={() => {
@@ -169,7 +176,7 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onPageChange }) => {
                         className="flex items-center space-x-1 bg-red-500 hover:bg-red-600 px-3 py-2 rounded-md text-sm font-medium transition-colors w-full"
                       >
                         <User className="h-4 w-4" />
-                        <span>Sign Up</span>
+                        <span>{t('nav.signup')}</span>
                       </button>
                     </div>
                   )}
