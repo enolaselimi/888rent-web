@@ -103,6 +103,7 @@ const CarCard: React.FC<CarCardProps> = ({
   onReserve, 
   renderStars 
 }) => {
+  const { t } = useTranslation();
   const { reviews, loading: reviewsLoading } = useReviews(car.id);
   
   const getAverageRating = (reviews: Review[]) => {

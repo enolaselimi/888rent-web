@@ -22,7 +22,11 @@ interface TranslationProviderProps {
   children: ReactNode;
 }
 
-const translations = {
+
+type TranslationKeys = { [key: string]: string };
+
+const translations: Record<Language, TranslationKeys> = {
+
   en: {
     // Header
     'nav.home': 'Home',
@@ -239,18 +243,21 @@ const translations = {
 
     // Home Page
     'home.title': 'Mirësevini në 888Rent',
-    'home.subtitle': 'Shërbime Premium të Makinave me Qira në Shqipëri',
-    'home.description': 'Përjetoni lirinë e rrugës me flotën tonë moderne të automjeteve premium. Nga udhëtimet e biznesit deri tek pushimet familjare, ne ofrojmë zgjidhje të besueshme, të rehatshme dhe të përballueshme për makinat me qira në të gjithë Shqipërinë.',
+    'home.subtitle': 'Shërbime Premium të Makinave me Qera në Shqipëri',
+    'home.description': 'Përjetoni lirinë e rrugës me flotën tonë moderne të automjeteve premium. Nga udhëtimet e biznesit deri tek pushimet familjare, ne ofrojmë zgjidhje të besueshme, të rehatshme dhe të përballueshme për makinat me qera në të gjithë Shqipërinë.',
     'home.reserve.now': 'Rezervo Tani',
     'home.view.fleet': 'Shiko Flotën Tonë',
     'home.why.choose.title': 'Pse të Zgjidhni 888Rent?',
-    'home.why.choose.subtitle': 'Ne jemi të përkushtuar për të ofruar përvojat e jashtëzakonshme të makinave me qira me cilësi dhe besueshmëri të pashembullt shërbimi.',
+    'home.why.choose.subtitle': 'Ne jemi të përkushtuar për të ofruar përvojat e jashtëzakonshme të makinave me qera me cilësi dhe besueshmëri të pashembullt shërbimi.',
+
     'home.feature.modern.fleet': 'Flotë Moderne',
     'home.feature.modern.fleet.desc': 'Automjete premium nga markat kryesore, të mirëmbajtura dhe të përditësuara rregullisht',
     'home.feature.24.7': 'Disponueshmëri 24/7',
     'home.feature.24.7.desc': 'Rezervoni në çdo kohë, merrni në çdo kohë - ne përshtatemi me orarin tuaj',
     'home.feature.insurance': 'Sigurim i Plotë',
-    'home.feature.insurance.desc': 'Mbulim i plotë dhe qetësi mendore për çdo qira',
+
+    'home.feature.insurance.desc': 'Mbulim i plotë dhe qetësi mendore për çdo qera',
+
     'home.feature.locations': 'Lokacione të Shumta',
     'home.feature.locations.desc': 'Pika të përshtatshme marrjeje dhe kthimi në të gjithë Shqipërinë',
     'home.feature.service': 'Shërbim Premium',
@@ -273,17 +280,19 @@ const translations = {
 
     // About Page
     'about.title': 'Rreth 888Rent',
-    'about.subtitle': 'Partneri juaj i besuar për shërbime premium të makinave me qira në Shqipëri. Ne jemi të përkushtuar për ta bërë udhëtimin tuaj të rehatshëm, të sigurt dhe të paharrueshëm.',
+
+    'about.subtitle': 'Partneri juaj i besuar për shërbime premium të makinave me qera në Shqipëri. Ne jemi të përkushtuar për ta bërë udhëtimin tuaj të rehatshëm, të sigurt dhe të paharrueshëm.',
     'about.story.title': 'Historia Jonë',
-    'about.story.p1': 'E themeluar me një vizion për të revolucionarizuar shërbimet e makinave me qira në Shqipëri, 888Rent është rritur nga një biznes i vogël lokal në një emër të besuar në qiratë e automjeteve premium. Udhëtimi ynë filloi me një besim të thjeshtë: çdo klient meriton shërbim të jashtëzakonshëm dhe transport të besueshëm.',
-    'about.story.p2': 'Sot, ne shërbejmë me krenari qindra klientë të kënaqur, nga udhëtarët e biznesit dhe turistët deri tek banorët lokalë që kanë nevojë për zgjidhje transporti të përkohshëm. Përkushtimi ynë ndaj cilësisë, besueshmërisë dhe kënaqësisë së klientit na ka bërë një zgjedhje të preferuar për makinat me qira në të gjithë Shqipërinë.',
+    'about.story.p1': 'E themeluar me një vizion për të revolucionarizuar shërbimet e makinave me qera në Shqipëri, 888Rent është rritur nga një biznes i vogël lokal në një emër të besuar në qeratë e automjeteve premium. Udhëtimi ynë filloi me një besim të thjeshtë: çdo klient meriton shërbim të jashtëzakonshëm dhe transport të besueshëm.',
+    'about.story.p2': 'Sot, ne shërbejmë me krenari qindra klientë të kënaqur, nga udhëtarët e biznesit dhe turistët deri tek banorët lokalë që kanë nevojë për zgjidhje transporti të përkohshëm. Përkushtimi ynë ndaj cilësisë, besueshmërisë dhe kënaqësisë së klientit na ka bërë një zgjedhje të preferuar për makinat me qera në të gjithë Shqipërinë.',
     'about.story.p3': 'Ne vazhdojmë të investojmë në flotën tonë, teknologjinë dhe ekipin për të siguruar që çdo përvojë 888Rent të jetë e qetë, profesionale dhe të tejkalojë pritshmëritë.',
     'about.mission.title': 'Misioni Ynë',
-    'about.mission.text': 'Të ofrojmë përvojat e jashtëzakonshme të makinave me qira që u mundësojnë klientëve tanë të eksplorojnë Shqipërinë me besim, rehati dhe përshtatshmëri.',
+    'about.mission.text': 'Të ofrojmë përvojat e jashtëzakonshme të makinave me qera që u mundësojnë klientëve tanë të eksplorojnë Shqipërinë me besim, rehati dhe përshtatshmëri.',
     'about.vision.title': 'Vizioni Ynë',
-    'about.vision.text': 'Të jemi kompania kryesuese e makinave me qira në Shqipëri, e njohur për flotën tonë premium, shërbimin e shkëlqyer të klientit dhe zgjidhjet novatore që e bëjnë udhëtimin të lehtë.',
+    'about.vision.text': 'Të jemi kompania kryesuese e makinave me qera në Shqipëri, e njohur për flotën tonë premium, shërbimin e shkëlqyer të klientit dhe zgjidhjet novatore që e bëjnë udhëtimin të lehtë.',
     'about.services.title': 'Shërbimet Tona',
-    'about.services.subtitle': 'Ne ofrojmë zgjidhje gjithëpërfshirëse të makinave me qira të dizajnuara për të përmbushur nevojat e ndryshme të transportit me cilësi dhe shërbim të pakompromis.',
+    'about.services.subtitle': 'Ne ofrojmë zgjidhje gjithëpërfshirëse të makinave me qera të dizajnuara për të përmbushur nevojat e ndryshme të transportit me cilësi dhe shërbim të pakompromis.',
+
     'about.service.fleet.title': 'Flotë Premium',
     'about.service.fleet.desc': 'Automjetet tona të zgjedhura me kujdes përfaqësojnë më të mirën në përsosmërinë e automobilave. Nga sedanet luksoze deri tek kompaktet efikase, çdo makinë në flotën tonë është mirëmbajtur me kujdes dhe përditësuar rregullisht për të siguruar performancë dhe rehati optimale.',
     'about.service.scheduling.title': 'Planifikim Fleksibël',
@@ -291,13 +300,15 @@ const translations = {
     'about.service.locations.title': 'Lokacione Strategjike',
     'about.service.locations.desc': 'Me pika marrjeje në Aeroportin e Tiranës, Aeroportin e Vlorës dhe Portin e Vlorës, ne jemi pozicionuar atje ku ju keni më shumë nevojë. Lokacionet tona janë zgjedhur për përshtatshmëri dhe akses maksimal.',
     'about.service.protection.title': 'Mbrojtje e Plotë',
-    'about.service.protection.desc': 'Çdo qira përfshin mbulim gjithëpërfshirës sigurimesh. Drejtoni me besim duke ditur se jeni plotësisht të mbrojtur. Paketat tona të sigurimeve janë dizajnuar për t\'ju dhënë qetësi mendore gjatë gjithë udhëtimit tuaj.',
+
+    'about.service.protection.desc': 'Çdo qera përfshin mbulim gjithëpërfshirës sigurimesh. Drejtoni me besim duke ditur se jeni plotësisht të mbrojtur. Paketat tona të sigurimeve janë dizajnuar për t\'ju dhënë qetësi mendore gjatë gjithë udhëtimit tuaj.',
     'about.why.choose.title': 'Pse të Zgjidhni 888Rent?',
-    'about.why.choose.subtitle': 'Përkushtimi ynë ndaj përsosmërisë na dallon në tregun shqiptar të makinave me qira. Ja çfarë na bën zgjedhjen e preferuar për klientët e kujdesshëm.',
+    'about.why.choose.subtitle': 'Përkushtimi ynë ndaj përsosmërisë na dallon në tregun shqiptar të makinave me qera. Ja çfarë na bën zgjedhjen e preferuar për klientët e kujdesshëm.',
     'about.why.customer.title': 'Qasje e Centruar tek Klienti',
-    'about.why.customer.desc': 'Kënaqësia juaj është prioriteti ynë. Ekipi ynë i përkushtuar bën më shumë se sa duhet për të siguruar që çdo aspekt i përvojës suaj të qirasë të tejkalojë pritshmëritë.',
+    'about.why.customer.desc': 'Kënaqësia juaj është prioriteti ynë. Ekipi ynë i përkushtuar bën më shumë se sa duhet për të siguruar që çdo aspekt i përvojës suaj të qerasë të tejkalojë pritshmëritë.',
     'about.why.excellence.title': 'Përsosmëri e Provuar',
-    'about.why.excellence.desc': 'Vitet e përvojës në tregun shqiptar të makinave me qira na kanë mësuar se çfarë ka më shumë rëndësi për klientët tanë. Ne kemi rafinuar shërbimet tona bazuar në reagime dhe nevoja reale.',
+    'about.why.excellence.desc': 'Vitet e përvojës në tregun shqiptar të makinave me qera na kanë mësuar se çfarë ka më shumë rëndësi për klientët tanë. Ne kemi rafinuar shërbimet tona bazuar në reagime dhe nevoja reale.',
+
     'about.why.expertise.title': 'Ekspertizë Lokale',
     'about.why.expertise.desc': 'Si një kompani lokale shqiptare, ne kuptojmë nevojat unike të banorëve dhe vizitorëve. Ne ofrojmë njohuri nga brenda dhe rekomandime të personalizuara.',
     'about.why.process.title': 'Proces i Shpejtë dhe i Lehtë',
@@ -361,7 +372,9 @@ const translations = {
 
     // Admin Page
     'admin.title': 'Paneli i Administratorit',
-    'admin.subtitle': 'Menaxhoni biznesin tuaj të makinave me qira',
+
+    'admin.subtitle': 'Menaxhoni biznesin tuaj të makinave me qera',
+
     'admin.overview': 'Përmbledhje',
     'admin.cars': 'Makinat',
     'admin.reservations': 'Rezervimet',
@@ -429,6 +442,7 @@ const translations = {
 
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
+
 
   const t = (key: string): string => {
     return translations[language][key] || key;
